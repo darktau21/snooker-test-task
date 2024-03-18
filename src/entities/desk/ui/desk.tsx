@@ -66,6 +66,31 @@ export function Desk({
     return () => cancelAnimationFrame(animationFrameId);
   }, [ctx, dispatch, calculateCollisions, renderBall, width, height]);
 
+  const dragStartHandler = ctx
+    ? eventWrapper(ctx, (mouseX, mouseY) => {
+        dispatch(setBalls((balls) => dragStart(balls, mouseX, mouseY)));
+        const target = balls.find(
+          (ball) =>
+            (mouseX - ball.x) ** 2 - (mouseY - ball.y) ** 2 <= ball.radius ** 2
+        );
+        if (!target) return;
+        onClick(target);
+      })
+    : undefined;
+
+  const dragMoveHandler = ctx
+    ? eventWrapper(ctx, (mouseX, mouseY, event) => {
+        if (event?.buttons === 1) {
+          clearClick();
+        }
+        dispatch(setBalls((balls) => ballMove(balls, mouseX, mouseY)));
+      })
+    : undefined;
+
+  const dragEndHandler = () => {
+    dispatch(setBalls((balls) => dragEnd(balls)));
+  };
+
   return (
     <canvas
       style={{
@@ -75,33 +100,9 @@ export function Desk({
       height={height}
       ref={canvasRef}
       className={styles.desk}
-      onMouseDown={
-        ctx
-          ? eventWrapper(ctx, (mouseX, mouseY) => {
-              dispatch(setBalls((balls) => dragStart(balls, mouseX, mouseY)));
-              const target = balls.find(
-                (ball) =>
-                  (mouseX - ball.x) ** 2 - (mouseY - ball.y) ** 2 <=
-                  ball.radius ** 2
-              );
-              if (!target) return;
-              onClick(target);
-            })
-          : undefined
-      }
-      onMouseMove={
-        ctx
-          ? eventWrapper(ctx, (mouseX, mouseY, event) => {
-              if (event?.buttons === 1) {
-                clearClick();
-              }
-              dispatch(setBalls((balls) => ballMove(balls, mouseX, mouseY)));
-            })
-          : undefined
-      }
-      onMouseUp={() => {
-        dispatch(setBalls((balls) => dragEnd(balls)));
-      }}
+      onPointerDown={dragStartHandler}
+      onPointerMove={dragMoveHandler}
+      onPointerUp={dragEndHandler}
     />
   );
 }

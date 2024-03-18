@@ -7,7 +7,10 @@ export function reducer(state: DeskStore, action: Action): DeskStore {
       if (Array.isArray(action.payload)) {
         return { ...state, balls: action.payload };
       }
-      return { ...state, balls: action.payload([...state.balls]) };
+      return {
+        ...state,
+        balls: action.payload(state.balls.map((b) => ({ ...b }))),
+      };
     case "SET_CTX":
       return { ...state, ctx: action.payload };
     case "SET_SIZE":
