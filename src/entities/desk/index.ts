@@ -5,5 +5,5 @@ export { useDeskStore } from "./model/use-desk-store";
 export { DeskStoreProvider } from "./model/desk-store-provider";
 export * from "./model/actions";
 export { calculateCollisions } from "./model/calculate-collisions";
-export { Color } from "./types";
+export { Color, type Ball as TBall } from "./types";
 export { drawBall } from "./ui/draw-ball";

@@ -1,7 +1,7 @@
-import type { Ball } from "@/entities/ball";
+import type { TBall } from "@/entities/desk";
 import { MAX_THROWING_SPEED } from "./constants";
 
-export function dragStart(balls: Ball[], mouseX: number, mouseY: number) {
+export function dragStart(balls: TBall[], mouseX: number, mouseY: number) {
   for (let i = 0; i < balls.length; i++) {
     const ball = balls[i];
     const distance = Math.sqrt((mouseX - ball.x) ** 2 + (mouseY - ball.y) ** 2);
@@ -13,7 +13,7 @@ export function dragStart(balls: Ball[], mouseX: number, mouseY: number) {
   return balls;
 }
 
-export function ballMove(balls: Ball[], mouseX: number, mouseY: number) {
+export function ballMove(balls: TBall[], mouseX: number, mouseY: number) {
   for (let i = 0; i < balls.length; i++) {
     const ball = balls[i];
     if (ball.isDragging) {
@@ -51,7 +51,7 @@ export function ballMove(balls: Ball[], mouseX: number, mouseY: number) {
   return balls;
 }
 
-export function dragEnd(balls: Ball[]) {
+export function dragEnd(balls: TBall[]) {
   balls.forEach((ball) => (ball.isDragging = false));
   return balls;
 }
